@@ -22,14 +22,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();});
      Route::post("/new_post","PostController@new_post");
-    Route::post("update_post","PostController@update_post"); 
+    Route::post("update_post","PostController@update_post");
     Route::get("/me_post","PostController@me_post");
     Route::get("/delete_post/{id}","PostController@delete_post");
-    Route::get("/tous_post","PostController@tous_post"); 
+   // Route::get("/tous_post","PostController@tous_post");
     Route::get("/profile","UserController@profile");
     Route::get("/logout","UserController@logout");
     Route::post("update_password","UserController@update_password");
 });
 Route::post("/register","UserController@register");
 Route::post('/login','UserController@login');
-Route::post("code_validation","UserController@validation");
+Route::post("/code_validation","UserController@validation");
+Route::get("/tous_post","PostController@tous_post");
+Route::get("/check_token","UserController@checkToken");

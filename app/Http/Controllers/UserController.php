@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Mail\send_validation;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 
 class UserController extends Controller
 {
     public function register(Request $request){
-        
-          //validate request   
+
+          //validate request
            $this->validate($request,[
                 'fake_name'=>'required',
                 'name'=>'required',
@@ -26,10 +27,10 @@ class UserController extends Controller
             ]);
            // $e=controlle_inscri::whereEmail($request->email)->first();
             //if(isset($e->id)){
-              
-                    
+
+
                     $code=Str::random(6);
-                      // create user  
+                      // create user
                       $user= new User;
                       $user->fake_name = $request->fake_name;
                       $user->name=$request->name;
@@ -48,14 +49,14 @@ class UserController extends Controller
 
 
                      return response()->json(
-                        ["message"=>"create compte "]
-                    ); 
-                  
+                        ["message"=>"create compte"]
+                    );
+
             //}else{
             //    return response()->json(
             //        ["message"=>"le email ne pas email de ista"]
             //    );
-            //}    
+            //}
     }
 
     public function login(Request $request){
@@ -75,9 +76,11 @@ class UserController extends Controller
                     ]);
                 }
             }else{
-                return "vrefie votre email";
+                return response()->json([
+                    "message"=>"vrefie votre email"
+                 ]);
             }
-            
+
 
         }
         else{
@@ -90,7 +93,7 @@ class UserController extends Controller
         return auth()->user();
     }
     function logout(){
-        auth()->user()->tokens()->delete();
+       auth()->user()->tokens()->delete();
         return response()->json([
             "message"=>"logout"
         ]);
@@ -108,7 +111,20 @@ class UserController extends Controller
             return "email_verifie";
         } else{
             return"code validation incorrect";
-        } 
+        }
    }
-    
+
+
+function checkToken(Request $request) {
+    if (Auth::guard('sanctum')->check()) {
+        return response()->json([
+            'message' => 'Le token existe.'
+        ]);
+    } else {
+        return response()->json([
+            'message' => "Le token n existe pas."
+        ], 404);
+    }
+}
+
 }

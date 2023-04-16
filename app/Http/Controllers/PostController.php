@@ -46,10 +46,8 @@ class PostController extends Controller
         return response()->json([
          "message"=>"le post est update"
         ]);
-        
+
    }
-
-
 
 
 }
